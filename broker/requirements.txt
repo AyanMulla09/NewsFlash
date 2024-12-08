@@ -1,10 +1,9 @@
 Flask
 Flask-SQLAlchemy
 requests
-beautifulsoup4
 pandas
 pytest
-kafka-python
+confluent-kafka
 apscheduler
 sqlalchemy
 psycopg2-binary
@@ -12,4 +11,3 @@ docker
 pika
 schedule
 celery
-pytest
