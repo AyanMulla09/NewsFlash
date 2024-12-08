@@ -3,4 +3,3 @@ WORKDIR /app
 COPY . /app
 RUN pip install -r requirements.txt
 CMD ["sh", "-c", "sleep 20 && python main.py"]
-# CMD ["python", "main.py"]

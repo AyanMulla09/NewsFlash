@@ -53,8 +53,6 @@ if __name__ == "__main__":
         soup = BeautifulSoup(response.content, "html.parser")
         if soup:
             article_list = fetch_articles(soup)
-            logging.info(f"Articles found: {len(article_list)}")
-            print("Articles found:", len(article_list))
             try:
                 kafka_producer = Producer({'bootstrap.servers': 'kafka:9093'})
                 kafka_producer.produce('asiantimes', json.dumps(article_list))
@@ -64,9 +62,6 @@ if __name__ == "__main__":
                 kafka_producer.flush()
             except Exception as e:
                 print(e)
-
-            # df = pd.DataFrame(articles)
-            # df.to_csv("articles.csv", index=False, encoding="utf-8")
                 
     else:
         print(f"Failed to fetch page. Status code: {response.status_code}")

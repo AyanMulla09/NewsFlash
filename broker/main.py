@@ -22,8 +22,6 @@ conn = psycopg2.connect(
 )
 cursor = conn.cursor()           
 def insert_db(data, news_source):
-    # df = pd.DataFrame(data)
-    # df.to_csv("articles.csv", index=False, encoding="utf-8")
     for data_dict in data :
         try:
             query = "INSERT INTO "+news_source+" (title, category, image, link, date) VALUES (%s, %s, %s, %s, %s);"
@@ -58,7 +56,7 @@ if __name__ == "__main__":
             if data is None:
                 continue
 
-            print(f"Consumed: {data.value().decode('utf-8')}")
+            print(data.value().decode('utf-8'))
             data = data.value().decode('utf-8')
             data = loads(data)
             insert_db(data, "asiantimes")
