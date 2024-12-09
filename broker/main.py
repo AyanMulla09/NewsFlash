@@ -10,8 +10,7 @@ db_password = os.getenv('POSTGRES_PASSWORD')
 db_host = os.getenv('POSTGRES_HOST')
 db_port = os.getenv('POSTGRES_PORT')
 db_name = os.getenv('POSTGRES_DB')
-kafka_host = os.getenv('KAFKA_HOST')
-kafka_port = os.getenv('KAFKA_PORT')
+kafka_url = os.getenv('KAFKA_URL_INSIDE')
 
 conn = psycopg2.connect(
     host=db_host,
@@ -56,7 +55,7 @@ if __name__ == "__main__":
             if data is None:
                 continue
 
-            print(data.value().decode('utf-8'))
+            # print(data.value().decode('utf-8'))
             data = data.value().decode('utf-8')
             data = loads(data)
             insert_db(data, "asiantimes")

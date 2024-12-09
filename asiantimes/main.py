@@ -7,8 +7,7 @@ from confluent_kafka import Producer
 import os
 import logging
 
-kafka_host = os.getenv('KAFKA_HOST')
-kafka_port = os.getenv('KAFKA_PORT')
+kafka_url = os.getenv('KAFKA_URL_INSIDE')
 BASE_URL = "https://asiatimes.com/"
 
 
@@ -41,7 +40,7 @@ def fetch_articles(soup):
                     "Date": datetime.now().strftime("%Y-%m-%d")
                 })
             except Exception as e:
-                print(f"Error parsing article: {e}")
+                print(e)
 
     return articles_dict
 
@@ -64,7 +63,7 @@ if __name__ == "__main__":
                 print(e)
                 
     else:
-        print(f"Failed to fetch page. Status code: {response.status_code}")
+        print(f"Failed to Fetch asiantimes")
             
     
 
