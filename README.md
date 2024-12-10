@@ -1,7 +1,21 @@
 # COMP41720
 
 
-
+## .env file
+```
+POSTGRES_DB="news"
+POSTGRES_USER="postgres"
+POSTGRES_PASSWORD="password"
+POSTGRES_HOST="database"
+POSTGRES_PORT="5432"
+KAFKA_ADVERTISED_LISTENERS="INSIDE://kafka:9093,OUTSIDE://localhost:9092"
+KAFKA_LISTENER_SECURITY_PROTOCOL_MAP="INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT"
+KAFKA_LISTENERS="INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092"
+KAFKA_INTER_BROKER_LISTENER_NAME="INSIDE"
+KAFKA_ZOOKEEPER_CONNECT="zookeeper:2181"
+KAFKA_CREATE_TOPICS="asianews:1:1"
+KAFKA_URL_INSIDE="kafka:9093"
+```
 ## Getting started
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
