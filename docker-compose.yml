@@ -54,7 +54,18 @@ services:
     # volumes:
     #   - ./asiantimes:/usr/src/app  
     networks:
-      - backend      
+      - backend   
+
+  guardian:    
+    env_file: ".env"  
+    depends_on:
+      - kafka
+      - broker
+
+    build: guardian/  
+    networks:
+      - backend     
+
 
 networks:
   backend:
