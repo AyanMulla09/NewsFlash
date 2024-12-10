@@ -47,7 +47,7 @@ if __name__ == "__main__":
         'group.id': 'news_services',
         'auto.offset.reset': 'earliest'
     })
-    broker.subscribe(['asiantimes'])
+    broker.subscribe(['asianews'])
 
     try:
         while True:
@@ -55,11 +55,10 @@ if __name__ == "__main__":
             if data is None:
                 continue
 
-            # print(data.value().decode('utf-8'))
             data = data.value().decode('utf-8')
             data = loads(data)
-            insert_db(data, "asiantimes")
-            test_service("asiantimes")
+            insert_db(data, "asianews")
+            test_service("asianews")
 
 
     except Exception as e:

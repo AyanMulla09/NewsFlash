@@ -1,6 +1,6 @@
 \c news
 
-CREATE TABLE asiantimes (
+CREATE TABLE asianews (
     id SERIAL PRIMARY KEY,
     title VARCHAR(500) NOT NULL,
     category VARCHAR(100),
