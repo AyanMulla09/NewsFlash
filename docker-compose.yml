@@ -1,0 +1,102 @@
+services:
+  zookeeper:
+    env_file: ".env"
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - backend           
+
+  kafka:
+    env_file: ".env"
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    expose:
+      - "9093"      
+    depends_on:
+      - zookeeper
+    networks:
+      - backend 
+    environment:
+      KAFKA_CREATE_TOPICS: "asianews:1:1,nyt_articles:1:1"            
+
+  database:
+    image: postgres
+    env_file: ".env"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql    
+      - db_data:/var/lib/postgresql/data
+    ports :
+      - "5432:5432"
+    networks:
+      - backend      
+
+  broker:    
+    env_file: ".env"  
+    depends_on:
+      - kafka
+      - database
+
+    build: broker/  
+
+    volumes:
+      - ./broker:/usr/src/app  
+    networks:
+      - backend     
+
+  asianews:    
+    env_file: ".env"  
+    depends_on:
+      - kafka
+      - broker
+
+    build: asianews/  
+
+    volumes:
+      - ./asiantimes:/usr/src/app  
+    networks:
+      - backend   
+
+  nytimes:    
+    env_file: ".env"  
+    depends_on:
+      - kafka
+      - broker
+    build: nytimes/  
+    volumes:
+      - ./nytimes:/usr/src/app  
+    networks:
+      - backend  
+
+  guardian:    
+    env_file: ".env"  
+    depends_on:
+      - kafka
+      - broker
+
+    build: guardian/  
+    networks:
+      - backend     
+
+  api:    
+    env_file: ".env"  
+    depends_on:
+      - database
+
+    build: api/  
+
+    volumes:
+      - ./api:/usr/src/app  
+    networks:
+      - backend 
+
+    ports:
+      - 8000:8000          
+
+networks:
+  backend:
+
+volumes:
+  db_data:  
+

@@ -1,0 +1,9 @@
+requests
+pandas
+pytest
+apscheduler
+schedule
+celery
+confluent-kafka
+json
+datetime

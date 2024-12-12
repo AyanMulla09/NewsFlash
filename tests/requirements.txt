@@ -1,0 +1,15 @@
+Flask
+Flask-SQLAlchemy
+requests
+beautifulsoup4
+pandas
+pytest
+kafka-python
+apscheduler
+sqlalchemy
+psycopg2-binary
+docker
+pika
+schedule
+celery
+pytest

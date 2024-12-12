@@ -1,0 +1,14 @@
+uvicorn
+fastapi 
+requests
+beautifulsoup4
+pandas
+pytest
+apscheduler
+sqlalchemy
+psycopg2-binary
+docker
+pika
+schedule
+celery
+pytest

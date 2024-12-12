@@ -1,0 +1,1 @@
+*/59 * * * * /usr/local/bin/python3 ../app/main.py >> cron_log.log 2>&1 

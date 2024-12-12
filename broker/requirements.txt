@@ -1,0 +1,13 @@
+Flask
+Flask-SQLAlchemy
+requests
+pandas
+pytest
+confluent-kafka
+apscheduler
+sqlalchemy
+psycopg2-binary
+docker
+pika
+schedule
+celery
