@@ -5,5 +5,4 @@ apscheduler
 schedule
 celery
 confluent-kafka
-json
 datetime
