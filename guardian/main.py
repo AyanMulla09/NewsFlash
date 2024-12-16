@@ -21,9 +21,6 @@ def fetch_articles():
         })
     
     return transformed_results
-print('JYRGFBKUEDYFBXKAJYFCGBXUA')
-print(fetch_articles())
-
 
 
 if __name__ == "__main__":

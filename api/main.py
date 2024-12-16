@@ -6,6 +6,7 @@ import logging
 
 app = FastAPI(debug=True)
 app.include_router(asianews_router.router)
+app.include_router(guardian_router.router)
 
 @app.get("/")
 def redirect_docs():
