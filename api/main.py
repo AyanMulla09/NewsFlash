@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from routers import asianews_router
+from routers import guardian_router
 import logging
 
 
