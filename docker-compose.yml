@@ -80,7 +80,14 @@ services:
       - backend 
 
     ports:
-      - 8000:8000          
+      - 8000:8000
+
+  web:
+    image: frontend:latest
+    ports:
+      - 8080:80
+    networks:
+      - backend
 
 networks:
   backend:
