@@ -9,6 +9,16 @@ git pull origin develop
 git checkout feature/frontend
 docker-compose up
 ```
+
+CLI Commands open frontend page
+```
+git clone https://gitlab.com/Glenmic/COMP41720.git
+git checkout combine-project
+git pull origin combine-project
+docker-compose up
+open http://localhost:8080/#/
+```
+
 ## .env file
 Create a .env file in the root folder and paste the below details
 ```
