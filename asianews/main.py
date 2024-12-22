@@ -6,6 +6,7 @@ import json
 from confluent_kafka import Producer
 import os
 import logging
+import re
 
 kafka_url = os.getenv('KAFKA_URL_INSIDE')
 BASE_URL = "https://asianews.network/"
@@ -24,6 +25,7 @@ def fetch_articles(soup):
             
             category_ul = article.find('ul', class_='post-categories')  if article.find('ul', class_='post-categories') else "NA"
             category = category_ul.find("a").text.strip() if category_ul else "NA"
+            category = re.sub(r'[^A-Za-z]', "", category).lower()
             articles_dict.append({
                 "Title": title,
                 "Category": category,

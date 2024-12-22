@@ -4,6 +4,7 @@ from datetime import datetime
 from confluent_kafka import Producer, Consumer, KafkaException, KafkaError
 import os
 import logging
+import re
 
 # Kafka setup
 kafka_url = os.getenv('KAFKA_URL_INSIDE')
@@ -28,6 +29,7 @@ def fetch_nyt_articles(section="home"):
             for article in articles:
                 title = article.get("title", "NA")
                 section = article.get("section", "NA")
+                section = re.sub(r'[^A-Za-z]', "", section).lower()
                 url = article.get("url", "NA")
                 published_date = article.get("published_date", "NA")
                 
