@@ -1,3 +1,3 @@
-sleep 25
+sleep 30
 python3 /app/main.py 
 cron -f

@@ -25,7 +25,9 @@ def fetch_articles(soup):
             
             category_ul = article.find('ul', class_='post-categories')  if article.find('ul', class_='post-categories') else "NA"
             category = category_ul.find("a").text.strip() if category_ul else "NA"
-            category = re.sub(r'[^A-Za-z]', "", category).lower()
+            category = category.replace(" ", "_")
+            category = re.sub(r'[^A-Za-z_]', "", category).lower()
+            category = re.sub(r"_+", "_", category)
             articles_dict.append({
                 "Title": title,
                 "Category": category,

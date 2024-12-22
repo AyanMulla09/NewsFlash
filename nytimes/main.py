@@ -29,13 +29,13 @@ def fetch_nyt_articles(section="home"):
             for article in articles:
                 title = article.get("title", "NA")
                 section = article.get("section", "NA")
+                section = section.replace(" ", "_")
                 section = re.sub(r'[^A-Za-z]', "", section).lower()
+                section = re.sub(r"_+", "_", section)
                 url = article.get("url", "NA")
                 published_date = article.get("published_date", "NA")
-                
                 multimedia = article.get("multimedia", [])
                 image_url = multimedia[0]["url"] if multimedia else "NA"
-
                 articles_dict.append({
                     "Title": title,
                     "Category": section,
@@ -43,6 +43,7 @@ def fetch_nyt_articles(section="home"):
                     "Link": url,
                     "Date": published_date
                 })
+
 
             return articles_dict
         else:

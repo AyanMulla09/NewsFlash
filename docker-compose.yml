@@ -18,9 +18,7 @@ services:
       - zookeeper
     networks:
       - backend 
-    environment:
-      KAFKA_CREATE_TOPICS: "asianews:1:1,nyt_articles:1:1"            
-
+      
   database:
     image: postgres
     env_file: ".env"
@@ -76,6 +74,8 @@ services:
       - broker
 
     build: guardian/  
+    volumes:
+      - ./guardian:/usr/src/app      
     networks:
       - backend     
 

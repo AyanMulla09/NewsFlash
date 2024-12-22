@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import text
@@ -22,11 +22,11 @@ def get_articles(db: Session = Depends(get_postgres_db)):
     return articles
 
 
-@router.get("/categories", response_model=List[str])
+@router.get("/categories", response_model=Dict[str, List[str]])
 def get_categories(db: Session = Depends(get_postgres_db)):
     categories = db.query(AsiaNewsDB.category).distinct().all()
 
-    return [cat[0] for cat in categories]
+    return {"categories": [cat[0] for cat in categories]}
 
 @router.get("/date", response_model=List[AsiaNewsSchema])
 def fetch_articles_date(date_param: str, db: Session = Depends(get_postgres_db)):

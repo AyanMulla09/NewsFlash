@@ -6,4 +6,4 @@ COPY . /app
 RUN pip install -r requirements.txt
 RUN chmod 0644 /etc/cron.d/crontab
 RUN crontab /etc/cron.d/crontab
-CMD ["cron", "-f"]
+CMD ["bash", "run.sh"]

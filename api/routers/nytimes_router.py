@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from datetime import datetime
@@ -25,11 +25,11 @@ def get_articles(db: Session = Depends(get_postgres_db)):
         raise HTTPException(status_code=500, detail="Error fetching articles")
 
 # Get distinct categories of NYTimes articles
-@router.get("/categories", response_model=List[str])
+@router.get("/categories", response_model=Dict[str, List[str]])
 def get_categories(db: Session = Depends(get_postgres_db)):
     try:
         categories = db.query(NYTimesDB.category).distinct().all()
-        return [cat[0] for cat in categories]
+        return {"categories": [cat[0] for cat in categories]}
     except Exception as e:
         logger.error(f"Error fetching categories: {e}")
         raise HTTPException(status_code=500, detail="Error fetching categories")
@@ -38,7 +38,7 @@ def get_categories(db: Session = Depends(get_postgres_db)):
 def fetch_articles_date(db: Session = Depends(get_postgres_db)):
     date_param = datetime.today().date().strftime("%Y-%m-%d")
     
-    articles = db.query(NYTimesSchema).filter(NYTimesSchema.date == date_param).all()
+    articles = db.query(NYTimesDB).filter(NYTimesDB.date == date_param).all()
     return articles   
 
 # Get articles for a specific date
