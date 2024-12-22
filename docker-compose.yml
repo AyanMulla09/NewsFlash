@@ -5,7 +5,7 @@ services:
     ports:
       - "2181:2181"
     networks:
-      - backend           
+      - backend
 
   kafka:
     env_file: ".env"
@@ -13,7 +13,7 @@ services:
     ports:
       - "9092:9092"
     expose:
-      - "9093"      
+      - "9093"
     depends_on:
       - zookeeper
     networks:
@@ -23,38 +23,38 @@ services:
     image: postgres
     env_file: ".env"
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql    
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - db_data:/var/lib/postgresql/data
     ports :
       - "5432:5432"
     networks:
-      - backend      
+      - backend
 
-  broker:    
-    env_file: ".env"  
+  broker:
+    env_file: ".env"
     depends_on:
       - kafka
       - database
 
-    build: broker/  
+    build: broker/
 
     volumes:
-      - ./broker:/usr/src/app  
+      - ./broker:/usr/src/app
     networks:
-      - backend     
+      - backend
 
-  asianews:    
-    env_file: ".env"  
+  asianews:
+    env_file: ".env"
     depends_on:
       - kafka
       - broker
 
-    build: asianews/  
+    build: asianews/
 
     volumes:
-      - ./asiantimes:/usr/src/app  
+      - ./asiantimes:/usr/src/app
     networks:
-      - backend   
+      - backend
 
   nytimes:    
     env_file: ".env"  
@@ -77,19 +77,19 @@ services:
     volumes:
       - ./guardian:/usr/src/app      
     networks:
-      - backend     
+      - backend
 
   api:    
     env_file: ".env"  
     depends_on:
       - database
 
-    build: api/  
+    build: api/
 
     volumes:
-      - ./api:/usr/src/app  
+      - ./api:/usr/src/app
     networks:
-      - backend 
+      - backend
 
     ports:
       - 8000:8000          
@@ -98,5 +98,5 @@ networks:
   backend:
 
 volumes:
-  db_data:  
+  db_data:
 
