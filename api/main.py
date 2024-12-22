@@ -1,13 +1,12 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
-from routers import asianews_router
-from routers import guardian_router
+from routers import asianews_router, nytimes_router
 import logging
 
 
-app = FastAPI(debug=True, trusted_hosts="*")
+app = FastAPI(debug=True)
 app.include_router(asianews_router.router)
-app.include_router(guardian_router.router)
+app.include_router(nytimes_router.router)
 
 @app.get("/")
 def redirect_docs():

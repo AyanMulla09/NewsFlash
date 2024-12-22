@@ -19,9 +19,10 @@ conn = psycopg2.connect(
     user=db_user,
     password=db_password
 )
-cursor = conn.cursor()           
+cursor = conn.cursor()
+
 def insert_db(data, news_source):
-    for data_dict in data :
+    for data_dict in data:
         try:
             query = "INSERT INTO "+news_source+" (title, category, image, link, date) VALUES (%s, %s, %s, %s, %s);"
             cursor.execute(query, (data_dict['Title'], data_dict['Category'], data_dict['Image'], data_dict['Link'], data_dict['Date']))
@@ -36,7 +37,6 @@ def test_service(news_source):
         rows = cursor.fetchall()
         for row in rows:
             print(row)
-
     except Exception as e:
         print(e)
 
@@ -47,20 +47,32 @@ if __name__ == "__main__":
         'group.id': 'news_services',
         'auto.offset.reset': 'earliest'
     })
-    broker.subscribe(['asianews'])
+    broker.subscribe(['asianews', 'nyt_articles'])  # Subscribe to both topics
 
     try:
         while True:
+            # Poll for messages
             data = broker.poll(timeout=1.0)
             if data is None:
                 continue
 
-            data = data.value().decode('utf-8')
-            data = loads(data)
-            insert_db(data, "asianews")
-            test_service("asianews")
+            # Check if the message has an error
+            if data.error():
+                print(f"Error: {data.error()}")
+                continue
 
+            # Decode the message value and load it as JSON
+            message_value = data.value().decode('utf-8')  # Decode the message payload (assuming it's UTF-8)
+            message_data = loads(message_value)  # Parse the JSON
+
+            # Extract topic and process data
+            topic = data.topic()  # Get the topic from the Kafka message
+            if topic == 'asianews':
+                insert_db(message_data, "asianews")
+                test_service("asianews")
+            elif topic == 'nyt_articles':
+                insert_db(message_data, "nytimes")
+                test_service("nytimes")
 
     except Exception as e:
         print(e)
-

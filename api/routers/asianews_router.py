@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import text
 from datetime import datetime, date
 from fastapi import Query
+import re
 import logging
 
 from models.asianews_model import AsiaNewsDB
@@ -37,18 +38,23 @@ def fetch_articles_date(date_param: str, db: Session = Depends(get_postgres_db))
     articles = db.query(AsiaNewsDB).filter(AsiaNewsDB.date == date_param).all()
     return articles    
 
+@router.get("/today", response_model=List[AsiaNewsSchema])
+def fetch_articles_date(db: Session = Depends(get_postgres_db)):
+    date_param = datetime.today().date().strftime("%Y-%m-%d")
+    
+    articles = db.query(AsiaNewsDB).filter(AsiaNewsDB.date == date_param).all()
+    return articles    
+
 @router.get("/{category}", response_model=List[AsiaNewsSchema])
 def get_articles_category(category: str, db: Session = Depends(get_postgres_db)):
+    category = re.sub(r'[^A-Za-z]', "", category).lower()
     articles_category = db.query(AsiaNewsDB).filter(AsiaNewsDB.category == category).all()
 
     return articles_category
 
-@router.get("/{date_param}/{category}", response_model=List[AsiaNewsSchema])
-def get_articles_category_date(category: str, date_param: str, db: Session = Depends(get_postgres_db)):
-    try:
-        date_param = datetime.strptime(date_param, "%Y-%m-%d").date()
-    except Exception as e:
-        raise HTTPException(status_code=400, detail="Invalid Date format")
+@router.get("/today/{category}", response_model=List[AsiaNewsSchema])
+def get_articles_category_date(category: str, db: Session = Depends(get_postgres_db)):    
+    date_param = datetime.today().date().strftime("%Y-%m-%d")
     
     articles_category_date = db.query(AsiaNewsDB).filter(AsiaNewsDB.category == category).filter(AsiaNewsDB.date == date_param).all()
     return articles_category_date

@@ -1,7 +1,7 @@
 services:
   zookeeper:
     env_file: ".env"
-    image: zookeeper:3.8.0
+    image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
     networks:
@@ -17,7 +17,9 @@ services:
     depends_on:
       - zookeeper
     networks:
-      - backend             
+      - backend 
+    environment:
+      KAFKA_CREATE_TOPICS: "asianews:1:1,nyt_articles:1:1"            
 
   database:
     image: postgres
@@ -56,6 +58,17 @@ services:
     networks:
       - backend   
 
+  nytimes:    
+    env_file: ".env"  
+    depends_on:
+      - kafka
+      - broker
+    build: nytimes/  
+    volumes:
+      - ./nytimes:/usr/src/app  
+    networks:
+      - backend  
+
   guardian:    
     env_file: ".env"  
     depends_on:
@@ -65,7 +78,6 @@ services:
     build: guardian/  
     networks:
       - backend     
-
 
   api:    
     env_file: ".env"  
@@ -80,14 +92,7 @@ services:
       - backend 
 
     ports:
-      - 8000:8000
-
-  web:
-    image: frontend:latest
-    ports:
-      - 8080:80
-    networks:
-      - backend
+      - 8000:8000          
 
 networks:
   backend:
