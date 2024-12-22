@@ -36,10 +36,13 @@ def get_categories(db: Session = Depends(get_postgres_db)):
 
 @router.get("/today", response_model=List[NYTimesSchema])
 def fetch_articles_date(db: Session = Depends(get_postgres_db)):
-    date_param = datetime.today().date().strftime("%Y-%m-%d")
-    
-    articles = db.query(NYTimesDB).filter(NYTimesDB.date == date_param).all()
-    return articles   
+    try:
+        date_param = datetime.today().date().strftime("%Y-%m-%d")
+        articles = db.query(NYTimesDB).filter(NYTimesDB.date == date_param).all()
+        return articles   
+    except Exception as e:
+        logger.error(f"Error fetching articles by date: {e}")
+        raise HTTPException(status_code=500, detail="Error fetching articles by date")
 
 # Get articles for a specific date
 @router.get("/date", response_model=List[NYTimesSchema])
@@ -70,7 +73,10 @@ def get_articles_category(category: str, db: Session = Depends(get_postgres_db))
 # Get articles by both category and date
 @router.get("/today/{category}", response_model=List[NYTimesSchema])
 def get_articles_category_date(category: str, db: Session = Depends(get_postgres_db)):
-    date_param = datetime.today().date().strftime("%Y-%m-%d")
-        
-    articles_category_date = db.query(NYTimesDB).filter(NYTimesDB.category == category).filter(NYTimesDB.date == date_param).all()
-    return articles_category_date
+    try :
+        date_param = datetime.today().date().strftime("%Y-%m-%d")        
+        articles_category_date = db.query(NYTimesDB).filter(NYTimesDB.category == category).filter(NYTimesDB.date == date_param).all()
+        return articles_category_date
+    except Exception as e:
+        logger.error(f"Error fetching articles by category and date: {e}")
+        raise HTTPException(status_code=500, detail="Error fetching articles by category and date")

@@ -17,15 +17,23 @@ router = APIRouter(prefix="/guardian", tags=["Guardian"])
 
 @router.get("/", response_model=List[GuardianSchema])
 def get_articles(db: Session = Depends(get_postgres_db)):
-    articles = db.query(GuardianDB).all()
-    return articles
+    try:
+        articles = articles = db.query(GuardianDB).all()
+        return articles
+    except Exception as e:
+        logger.error(f"Error fetching articles: {e}")
+        raise HTTPException(status_code=500, detail="Error fetching articles")        
 
 
 @router.get("/categories", response_model=Dict[str, List[str]])
 def get_categories(db: Session = Depends(get_postgres_db)):
-    categories = db.query(GuardianDB.category).distinct().all()
-
-    return {"categories": [cat[0] for cat in categories]}
+    try:
+        categories = categories = db.query(GuardianDB.category).distinct().all()
+        return {"categories": [cat[0] for cat in categories]}
+    except Exception as e:
+        logger.error(f"Error fetching categories: {e}")
+        raise HTTPException(status_code=500, detail="Error fetching categories")        
+    
 
 @router.get("/date", response_model=List[GuardianSchema])
 def fetch_articles_date(date_param: str, db: Session = Depends(get_postgres_db)):
@@ -39,22 +47,33 @@ def fetch_articles_date(date_param: str, db: Session = Depends(get_postgres_db))
 
 @router.get("/today", response_model=List[GuardianSchema])
 def fetch_articles_date(db: Session = Depends(get_postgres_db)):
-    date_param = datetime.today().date().strftime("%Y-%m-%d")
-    
-    articles = db.query(GuardianDB).filter(GuardianDB.date == date_param).all()
-    return articles    
+    try:
+        date_param = datetime.today().date().strftime("%Y-%m-%d")
+        articles = db.query(GuardianDB).filter(GuardianDB.date == date_param).all()
+        return articles   
+    except Exception as e:
+        logger.error(f"Error fetching articles by date: {e}")
+        raise HTTPException(status_code=500, detail="Error fetching articles by date")         
 
 @router.get("/{category}", response_model=List[GuardianSchema])
 def get_articles_category(category: str, db: Session = Depends(get_postgres_db)):
-    articles_category = db.query(GuardianDB).filter(GuardianDB.category == category).all()
-
-    return articles_category
+    try:
+        category = re.sub(r'[^A-Za-z]', "", category).lower()
+        articles_category = db.query(GuardianDB).filter(GuardianDB.category == category).all()
+        return articles_category
+    except Exception as e:
+        logger.error(f"Error fetching articles by category: {e}")
+        raise HTTPException(status_code=500, detail="Error fetching articles by category")       
 
 
 @router.get("/today/{category}", response_model=List[GuardianSchema])
 def get_articles_category_date(category: str, db: Session = Depends(get_postgres_db)):    
-    date_param = datetime.today().date().strftime("%Y-%m-%d")
-    
-    articles_category_date = db.query(GuardianDB).filter(GuardianDB.category == category).filter(GuardianDB.date == date_param).all()
-    return articles_category_date
+    try :
+        date_param = datetime.today().date().strftime("%Y-%m-%d")        
+        articles_category_date = db.query(GuardianDB).filter(GuardianDB.category == category).filter(GuardianDB.date == date_param).all()
+        return articles_category_date
+    except Exception as e:
+        logger.error(f"Error fetching articles by category and date: {e}")
+        raise HTTPException(status_code=500, detail="Error fetching articles by category and date")    
+
 
