@@ -7,7 +7,6 @@ services:
     networks:
       - backend
 
-
   kafka:
     env_file: ".env"
     image: wurstmeister/kafka
@@ -18,15 +17,15 @@ services:
     depends_on:
       - zookeeper
     networks:
-      - backend 
-      
+      - backend
+
   database:
     image: postgres
     env_file: ".env"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - db_data:/var/lib/postgresql/data
-    ports :
+    ports:
       - "5432:5432"
     networks:
       - backend
@@ -36,9 +35,7 @@ services:
     depends_on:
       - kafka
       - database
-
     build: broker/
-
     volumes:
       - ./broker:/usr/src/app
     networks:
@@ -49,39 +46,36 @@ services:
     depends_on:
       - kafka
       - broker
-
     build: asianews/
-
     volumes:
       - ./asiantimes:/usr/src/app
     networks:
       - backend
 
-  nytimes:    
-    env_file: ".env"  
+  nytimes:
+    env_file: ".env"
     depends_on:
       - kafka
       - broker
-    build: nytimes/  
+    build: nytimes/
     volumes:
-      - ./nytimes:/usr/src/app  
-    networks:
-      - backend  
-
-  guardian:    
-    env_file: ".env"  
-    depends_on:
-      - kafka
-      - broker
-
-    build: guardian/  
-    volumes:
-      - ./guardian:/usr/src/app      
+      - ./nytimes:/usr/src/app
     networks:
       - backend
 
-  api:    
-    env_file: ".env"  
+  guardian:
+    env_file: ".env"
+    depends_on:
+      - kafka
+      - broker
+    build: guardian/
+    volumes:
+      - ./guardian:/usr/src/app
+    networks:
+      - backend
+
+  api:
+    env_file: ".env"
     depends_on:
       - database
     build: api/
@@ -93,16 +87,14 @@ services:
     ports:
       - 8000:8000
 
-  # web:
-  #   image: frontend:latest
-  #   build: web/
-  #   depends_on:
-  #     - api
-  #   ports:
-  #     - 8080:80
-  #   networks:
-  #     - frontend
-
+  web:
+    build: web/
+    depends_on:
+      - api
+    ports:
+      - 8080:80
+    networks:
+      - frontend
 
 networks:
   backend:
@@ -110,4 +102,3 @@ networks:
 
 volumes:
   db_data:
-
