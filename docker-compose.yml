@@ -93,15 +93,15 @@ services:
     ports:
       - 8000:8000
 
-  web:
-    image: frontend:latest
-    build: web/
-    depends_on:
-      - api
-    ports:
-      - 8080:80
-    networks:
-      - frontend
+  # web:
+  #   image: frontend:latest
+  #   build: web/
+  #   depends_on:
+  #     - api
+  #   ports:
+  #     - 8080:80
+  #   networks:
+  #     - frontend
 
 
 networks:
