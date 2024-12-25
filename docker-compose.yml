@@ -1,11 +1,12 @@
 services:
   zookeeper:
     env_file: ".env"
-    image: wurstmeister/zookeeper
+    image: zookeeper:3.8.0
     ports:
       - "2181:2181"
     networks:
       - backend
+
 
   kafka:
     env_file: ".env"
