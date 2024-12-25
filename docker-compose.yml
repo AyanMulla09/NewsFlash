@@ -84,19 +84,29 @@ services:
     env_file: ".env"  
     depends_on:
       - database
-
     build: api/
-
     volumes:
       - ./api:/usr/src/app
     networks:
       - backend
-
+      - frontend
     ports:
-      - 8000:8000          
+      - 8000:8000
+
+  web:
+    image: frontend:latest
+    build: web/
+    depends_on:
+      - api
+    ports:
+      - 8080:80
+    networks:
+      - frontend
+
 
 networks:
   backend:
+  frontend:
 
 volumes:
   db_data:
