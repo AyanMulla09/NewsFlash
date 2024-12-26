@@ -96,23 +96,21 @@ if __name__ == "__main__":
            
             topic = data.topic()  
             if topic == 'asianews':
+                del_past_data("asianews")
                 if today_data_check('asianews') : 
                     insert_db(message_data, 'asianews')
-                    del_past_data("asianews")
                 
-                # test_service("asianews")
             elif topic == 'nyt_articles':
+                del_past_data("nytimes")
                 if today_data_check('nytimes') : 
                     insert_db(message_data, 'nytimes')
-                    del_past_data("nytimes")
-                # test_service("nytimes")
+                    # test_service("nytimes")
 
             elif topic == 'guardian':
+                del_past_data("guardian")
                 if today_data_check('guardian') : 
                     insert_db(message_data, 'guardian')                
-                    del_past_data("guardian")
-                # insert_db(message_data, 'guardian')                
-                # test_service("guardian")
+
 
     except Exception as e:
         print(e)
