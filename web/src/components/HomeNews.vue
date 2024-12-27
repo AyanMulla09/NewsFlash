@@ -2,7 +2,7 @@
   .news-content
     .label-content
       <el-radio-group v-model="sortType" @change="changeNewsSort(sortType)">
-        <el-radio :value="'source'"> sort by source (default) </el-radio>
+        <el-radio :value="'source'"> sort by source </el-radio>
         <el-radio :value="'category'"> sort by category </el-radio>
         <el-radio :value="'title'"> sort by title </el-radio>
       </el-radio-group>
@@ -24,8 +24,8 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-// import { ElRadioGroup, ElRadio } from 'element-plus';
 import { getAsiaNews, getGuardianNews, getNyNews } from '@/service/newsAPIList/index.js';
+import { ElMessage } from 'element-plus';
 
 export default {
   name: 'HomeNews',
@@ -42,12 +42,16 @@ export default {
           getNyNews()
         ]);
         // console.log(asiaNewsList, guardianNewsList, nyNewsList)
+        // test code
+        // const asiaNewsList = []
+        // const guardianNewsList = []
+        // const nyNewsList = [];
         // add source in each list
         const newAsiaList = asiaNewsList.map(newsItem => ({
           ...newsItem,
           newsSource: 'AsiaNews'
         }));
-        // console.log(newAsiaList)
+        // console.log('newAsiaList', newAsiaList)
         const newGuardianList = guardianNewsList.map(newsItem => ({
           ...newsItem,
           newsSource: 'Guardian'
@@ -64,6 +68,13 @@ export default {
           ...newGuardianList,
           ...newNYList
         ];
+        // console.log('homeNewsList', homeNewsList.value, homeNewsList.value.length)
+        if (homeNewsList.value.length === 0) {
+          ElMessage({
+            message: 'No News update from the news API',
+            type: 'warning',
+          })
+        }
       } catch (error) {
         console.log('loading fail', error)
       }
@@ -73,11 +84,6 @@ export default {
       console.log(e)
       if (e === 'source') {
         console.log('sort by source')
-        // homeNewsList.value = [...homeNewsList.value].sort((a, b) => {
-        // const newsSourceA = a.newsSource.toLowerCase();
-        // const newsSourceB = b.newsSource.toLowerCase();
-        //     return newsSourceA.localeCompare(newsSourceB);
-        // });
         getHomePageData();
       } else if (e === 'category') {
         console.log('sort by category')

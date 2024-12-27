@@ -2,7 +2,7 @@
  * @Author: xuqin.zhan xuqing.zhao@ichainfo.com
  * @Date: 2024-12-19 18:26:13
  * @LastEditors: xuqin.zhan xuqing.zhao@ichainfo.com
- * @LastEditTime: 2024-12-24 00:11:21
+ * @LastEditTime: 2024-12-27 22:07:52
  * @FilePath: /COMP41720/src/views/HomePage.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -32,7 +32,7 @@ import AsianNews from '@/components/asianNews/AsianNews.vue';
 import GuardianNews from '@/components/guardianNews/GuardianNews.vue';
 import NYTimesNews from '@/components/nyTimesNews/NYTimesNews.vue';
 import { getAsiaNews, getGuardianNews, getNyNews } from '@/service/newsAPIList/index.js';
-import { ElTabs, ElTabPane } from 'element-plus';
+import { ElTabs, ElTabPane, ElMessage } from 'element-plus';
 
 export default {
   components: {
@@ -55,38 +55,65 @@ export default {
         console.log('enter asiapage');
         try {
           const asiaNewsResponse = await getAsiaNews();
+          // test code
+          // const asiaNewsResponse = [];
+          // console.log(asiaNewsResponse)
           if (asiaNewsResponse && Array.isArray(asiaNewsResponse)) {
+            console.log('enter')
+            if (asiaNewsResponse.length === 0) {
+              ElMessage({
+                message: 'No News update from the aisa news API',
+                type: 'warning',
+              })
+              }
             asiaList.value = asiaNewsResponse;
           } else {
             console.error('data exception of asianews');
           }
         } catch (error) {
-          console.error(error);
+          console.log(error);
         }
       } else if (tab.props.name === 'guardianpage' && guardianList.value.length === 0) {
           console.log('enter guardianpage');
           try {
             const guardianNewsResponse = await getGuardianNews();
             // console.log(guardianNewsResponse, 'guardianNewsResponse')
+            // test code
+            // const guardianNewsResponse = [];
             if (guardianNewsResponse && Array.isArray(guardianNewsResponse)) {
+              if (guardianNewsResponse.length === 0) {
+                ElMessage({
+                  message: 'No News update from the guardian news API',
+                  type: 'warning',
+                })
+              }
               guardianList.value = guardianNewsResponse;
             } else {
-              console.error('data exception of guardiannews');
+              console.log('data exception of guardiannews');
             }
           } catch (error) {
-            console.error(error);
+            console.log(error);
           }
       } else if (tab.props.name === 'nypage' && nyList.value.length === 0) {
           console.log('enter nypage');
           try {
             const nyNewsResponse = await getNyNews();
+            // console.log(nyNewsResponse)
+            // test code
+            // const nyNewsResponse = [];
             if (nyNewsResponse && Array.isArray(nyNewsResponse)) {
+              if (nyNewsResponse.length === 0) {
+                ElMessage({
+                  message: 'No News update from the NYTimes news API',
+                  type: 'warning',
+                })
+              }
               nyList.value = nyNewsResponse;
             } else {
-              console.error('data exception of nynews');
+              console.log('data exception of nynews');
             }
           } catch (error) {
-            console.error(error);
+            console.log(error);
           }
       }
     };
