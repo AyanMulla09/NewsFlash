@@ -7,6 +7,7 @@ from datetime import datetime
 import re
 
 API_KEY = os.getenv('GUARDIAN_API_KEY')
+kafka_url = os.getenv('KAFKA_URL_INSIDE')
 # API_KEY = '7c194277-c534-4402-9e3f-de51de1ad433'
 
 def fetch_articles():
@@ -30,12 +31,18 @@ def fetch_articles():
 
     return transformed_results
 
+def report(err, message):
+    if err is not None:
+        print("Error producing message:", err)
+
+    else:
+        print("Message to topic: ", message.topic())  
 
 if __name__ == "__main__":
     try:
         article_list = fetch_articles()
         if article_list :
-            kafka_producer = Producer({'bootstrap.servers': 'kafka:9093'})
+            kafka_producer = Producer({'bootstrap.servers': kafka_url, 'acks':'all'})
             kafka_producer.produce('guardian', json.dumps(article_list))      
             kafka_producer.flush()
 

@@ -54,12 +54,19 @@ def fetch_nyt_articles(section="home"):
         logging.error(f"Error fetching NYT articles: {e}")
         return []
 
+def report(err, message):
+    if err is not None:
+        print("Error producing message:", err)
+
+    else:
+        print("Message to topic: ", message.topic())  
+
 if __name__ == "__main__":
     # Fetch and produce articles for NYT Top Stories (e.g., "home" section)
     nyt_articles = fetch_nyt_articles("home")
     if nyt_articles:
         try:
-            kafka_producer = Producer({'bootstrap.servers': kafka_url})
+            kafka_producer = Producer({'bootstrap.servers': kafka_url, 'acks':'all'})
             kafka_producer.produce('nyt_articles', json.dumps(nyt_articles))
             kafka_producer.flush()
             logging.info("NYT articles successfully sent to Kafka.")
