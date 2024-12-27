@@ -38,6 +38,13 @@ def fetch_articles(soup):
 
     return articles_dict
 
+def report(err, message):
+    if err is not None:
+        print("Error producing message:", err)
+
+    else:
+        print("Message to topic: ", message.topic())  
+
 if __name__ == "__main__":
     headers = {"User-Agent": "Mozilla/5.0"}
     response = requests.get(BASE_URL, headers=headers)
@@ -47,8 +54,8 @@ if __name__ == "__main__":
         if soup:
             article_list = fetch_articles(soup)
             try:
-                kafka_producer = Producer({'bootstrap.servers': 'kafka:9093'})
-                kafka_producer.produce('asianews', json.dumps(article_list))                
+                kafka_producer = Producer({'bootstrap.servers': kafka_url, 'acks':'all'})
+                kafka_producer.produce('asianews', json.dumps(article_list), callback=report)                
         
                 kafka_producer.flush()
             except Exception as e:
