@@ -63,7 +63,7 @@ export default {
             console.error(response);
           }
         } catch (error) {
-          console.error(`Failed to fetch news category "${category}":`, error);
+          console.error(`Failed to fetch news category: "${category}":`, error);
         }
       }
     };
@@ -82,10 +82,10 @@ export default {
             })),
           ];
         } else {
-          console.error('Invalid categories data:', categoriesList);
+          console.log('Invalid categories data:', categoriesList);
         }
       } catch (error) {
-        console.error('Failed to fetch categories:', error);
+        console.log('Failed to fetch categories of nytimes', error);
       }
     };
     // update news list

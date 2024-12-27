@@ -23,7 +23,6 @@
 
 <script>
 import { ref, watch, nextTick, onMounted } from 'vue';
-// import { ElSelect, ElOption } from 'element-plus';
 import { getGuardianCategories, getSelectCateGuardian } from '@/service/newsAPIList/index.js';
 
 export default {
@@ -60,10 +59,10 @@ export default {
           if (response && Array.isArray(response)) {
             guardianNewsList.value = response;
           } else {
-            console.error(response);
+            console.log(response);
           }
         } catch (error) {
-          console.error(`Failed to fetch news category "${category}":`, error);
+          console.log(`Failed to fetch news category: "${category}":`, error);
         }
       }
     };
@@ -85,7 +84,7 @@ export default {
           console.error('Invalid categories data:', categoriesList);
         }
       } catch (error) {
-        console.error('Failed to fetch categories:', error);
+        console.error('Failed to fetch categories of guardian', error);
       }
     };
     // update news list
