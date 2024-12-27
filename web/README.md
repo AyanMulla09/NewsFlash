@@ -61,6 +61,7 @@ http://localhost:8000/docs#
 - eslint (code check)
 - axios (request api)
 - yarn (package and project management tool)
+- Nginx (Reverse proxy API requests, as a server to host static resource [html, js, css..])
 
 ## Local start Project setup
 ```
@@ -86,4 +87,8 @@ yarn lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ---
-
+## frontend project deployment process
+1. Frontend packaging and containerization: The Vue3 project is built using Node.js and create the static files.
+2. Nginx static resource hosting: Nginx as a server to host packaged frontend pages and static resources.
+3. Reverse proxy API requests
+4. Containerized deployment with docker
