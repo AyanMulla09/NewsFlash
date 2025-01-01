@@ -23,20 +23,6 @@ conn = psycopg2.connect(
 )
 cursor = conn.cursor()
 
-def today_data_check(news_source):
-    print("Inside data check")
-    try:
-        query = "SELECT Date FROM {table} ORDER BY Date DESC LIMIT 1;"
-        sql_query = sql.SQL(query).format(table=sql.Identifier(news_source))
-        cursor.execute(sql_query)
-        rows = cursor.fetchall()
-        for row in rows:
-            if row[0] == datetime.today().date():
-                return False
-            
-        return True
-    except Exception as e:
-        print(e)
 
 def insert_db(data, news_source):    
     try:
@@ -56,7 +42,8 @@ def test_service(news_source):
         cursor.execute(sql_query)
         rows = cursor.fetchall()
         for row in rows:
-            print(row)        
+            print(row)  
+                  
     except Exception as e:
         print(e)    
 
@@ -93,23 +80,21 @@ if __name__ == "__main__":
            
             message_value = data.value().decode('utf-8')  
             message_data = loads(message_value) 
-           
+
+                            
             topic = data.topic()  
             if topic == 'asianews':
-                del_past_data("asianews")
-                if today_data_check('asianews') : 
-                    insert_db(message_data, 'asianews')
+                del_past_data("asianews")                 
+                insert_db(message_data, 'asianews')
                 
             elif topic == 'nyt_articles':
-                del_past_data("nytimes")
-                if today_data_check('nytimes') : 
-                    insert_db(message_data, 'nytimes')
-                    # test_service("nytimes")
+                del_past_data("nytimes")                
+                insert_db(message_data, 'nytimes')                    
 
             elif topic == 'guardian':
-                del_past_data("guardian")
-                if today_data_check('guardian') : 
-                    insert_db(message_data, 'guardian')                
+            
+                del_past_data("guardian")                
+                insert_db(message_data, 'guardian')            
 
 
     except Exception as e:
