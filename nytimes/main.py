@@ -92,4 +92,4 @@ if __name__ == "__main__":
             except Exception as e:
                 logging.error(f"Error sending NYT articles to Kafka: {e}")
         
-        time.sleep(60)        
+        time.sleep(300)        
