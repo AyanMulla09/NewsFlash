@@ -5,6 +5,8 @@ from confluent_kafka import Producer, Consumer, KafkaException, KafkaError
 import os
 import logging
 import re
+import time
+import redis
 
 # Kafka setup
 kafka_url = os.getenv('KAFKA_URL_INSIDE')
@@ -14,8 +16,13 @@ kafka_topics = ['nyt_articles']
 NYT_API_KEY = os.getenv('NYT_API_KEY')
 NYT_BASE_URL = "https://api.nytimes.com/svc/topstories/v2/{}.json"
 
+try:
+    redis_client = redis.StrictRedis(host='redis', port=6379, db=0, decode_responses=True)
+except redis.ConnectionError as e:
+    print(e)
+    redis_client = None  
+
 def fetch_nyt_articles(section="home"):
-    """Fetch articles from the New York Times Top Stories API for a specific section."""
     try:
         url = NYT_BASE_URL.format(section)
         params = {"api-key": NYT_API_KEY}
@@ -57,18 +64,32 @@ def fetch_nyt_articles(section="home"):
 def report(err, message):
     if err is not None:
         print("Error producing message:", err)
-
     else:
-        print("Message to topic: ", message.topic())  
+        print("Message produced:", message.topic(), message.partition(), message.offset())
+
+def check_duplicate(article_list):
+    new_articles = []
+    for article_dict in article_list :
+        cache_key = article_dict["Title"]
+        if not redis_client.exists(cache_key):        
+            redis_client.setex(cache_key, 86400, 1)
+            new_articles.append(article_dict)
+  
+    return new_articles
 
 if __name__ == "__main__":
-    # Fetch and produce articles for NYT Top Stories (e.g., "home" section)
-    nyt_articles = fetch_nyt_articles("home")
-    if nyt_articles:
-        try:
-            kafka_producer = Producer({'bootstrap.servers': kafka_url, 'acks':'all'})
-            kafka_producer.produce('nyt_articles', json.dumps(nyt_articles))
-            kafka_producer.flush()
-            logging.info("NYT articles successfully sent to Kafka.")
-        except Exception as e:
-            logging.error(f"Error sending NYT articles to Kafka: {e}")
+    while True:
+        nyt_articles = fetch_nyt_articles("home")
+        if redis_client:
+                nyt_articles = check_duplicate(nyt_articles)        
+
+        if nyt_articles:
+            try:
+                kafka_producer = Producer({'bootstrap.servers': "kafka:9093", 'acks':'all'})
+                kafka_producer.produce('nyt_articles', json.dumps(nyt_articles), callback=report)                  
+                kafka_producer.flush()
+
+            except Exception as e:
+                logging.error(f"Error sending NYT articles to Kafka: {e}")
+        
+        time.sleep(60)        
