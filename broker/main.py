@@ -49,7 +49,7 @@ def test_service(news_source):
 
 
 def del_past_data(news_source):
-    day_before_yesterday = datetime.today() - timedelta(days=2)
+    day_before_yesterday = datetime.today() - timedelta(days=3)
     day_before_yesterday = day_before_yesterday.date().strftime("%Y-%m-%d")
     try:
         query = "DELETE FROM {table} WHERE date < %s;"
