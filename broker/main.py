@@ -91,8 +91,7 @@ if __name__ == "__main__":
                 del_past_data("nytimes")                
                 insert_db(message_data, 'nytimes')                    
 
-            elif topic == 'guardian':
-            
+            elif topic == 'guardian':            
                 del_past_data("guardian")                
                 insert_db(message_data, 'guardian')            
 

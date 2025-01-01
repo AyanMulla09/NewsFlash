@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
         if nyt_articles:
             try:
-                kafka_producer = Producer({'bootstrap.servers': "kafka:9093", 'acks':'all'})
+                kafka_producer = Producer({'bootstrap.servers': kafka_url, 'acks':'all'})
                 kafka_producer.produce('nyt_articles', json.dumps(nyt_articles), callback=report)                  
                 kafka_producer.flush()
 

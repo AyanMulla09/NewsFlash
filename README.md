@@ -28,7 +28,7 @@ GUARDIAN_API_KEY = "7c194277-c534-4402-9e3f-de51de1ad433"
 ```
 docker-compose up
 ```
-4. open http://localhost:8080/#/
+4. Wait for 30 seconds and open http://localhost:8080/#/
 
 
 

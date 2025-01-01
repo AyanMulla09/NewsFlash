@@ -72,7 +72,7 @@ if __name__ == "__main__":
                 if redis_client:
                     article_list = check_duplicate(article_list)
                 try:
-                    kafka_producer = Producer({'bootstrap.servers': "kafka:9093", 'acks':'all'})
+                    kafka_producer = Producer({'bootstrap.servers': kafka_url, 'acks':'all'})
                     kafka_producer.produce('asianews', json.dumps(article_list), callback=report)                
             
                     kafka_producer.flush()

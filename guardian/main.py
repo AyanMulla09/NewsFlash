@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
             if article_list :              
                     
-                kafka_producer = Producer({'bootstrap.servers': "kafka:9093", 'acks':'all'})
+                kafka_producer = Producer({'bootstrap.servers': kafka_url, 'acks':'all'})
                 
                 kafka_producer.produce('guardian', json.dumps(article_list), callback=report)    
                  
