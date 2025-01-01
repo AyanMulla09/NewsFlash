@@ -1,8 +1,4 @@
 requests
 beautifulsoup4
-pandas
-pytest
-apscheduler
-schedule
-celery
 confluent-kafka
+redis

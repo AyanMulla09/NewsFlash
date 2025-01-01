@@ -2,4 +2,4 @@ FROM python:3.9-slim
 WORKDIR /app
 COPY . /app
 RUN pip install -r requirements.txt
-CMD ["sh", "-c", "sleep 25 && python main.py"]
+CMD ["sh", "-c", "sleep 20 && python main.py"]
