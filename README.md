@@ -83,6 +83,8 @@ The system is divided into three primary layers:
     ```bash
     docker-compose up --build
     ```
+
+    **Note**: Wait about 30 seconds for all containers to initialize.
     
 4. **Access the API**:
     
