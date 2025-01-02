@@ -23,6 +23,7 @@ NewsFlash is a distributed system designed to aggregate, process, and display ne
 3. **PostgreSQL**: Relational database for structured storage of news articles.
 4. **FastAPI**: Backend framework for REST API development.
 5. **Python**: Data collection and processing scripts.
+6. **Redis**: Caching the data fetched from the APIs.
 
 ---
 
@@ -87,20 +88,27 @@ The system is divided into three primary layers:
     
     - The FastAPI documentation is available at `http://localhost:8000/docs`.
 
+5. **Access the website**:
+
+    - The NewsFlash website can be accessed at `http://localhost:8080/#`.
+
 ---
 
 ## Usage
 
 ### API Endpoints
-
-- **GET /articles**: Retrieve all articles.
-- **GET /articles/{category}**: Retrieve articles by category.
-- **GET /articles/latest**: Retrieve the latest articles.
+All of these endpoints would be under different news sources /asianews /nytimes /guardian (considered as newssource for showing the endpoints for documentation)
+- **GET newssource/**: Retrieve all the articles.
+- **GET newssource/categories**: Retrieve all categories.
+- **GET newssource/date**: Retrieve all articles by date.
+- **GET newssource/today**: Retrieve the latest articles.
+- **GET newssource/{category}**: Retrieve the articles for a specific category.
+- **GET newssource/today/{category}**: Retrieve the latest articles for a specific category.
 
 ### Example Request
 
 ```bash
-curl -X GET "http://localhost:8000/articles" -H "accept: application/json"
+curl -X GET "http://localhost:8000/nytimes" -H "accept: application/json"
 ```
 
 ---
@@ -114,7 +122,7 @@ curl -X GET "http://localhost:8000/articles" -H "accept: application/json"
     - Each source has a dedicated Kafka topic.
     - Data is published to these topics asynchronously.
 3. **Database Storage**:
-    - PostgreSQL stores articles with fields like `title`, `category`, `url`, `published_date`, and `source`.
+    - PostgreSQL stores articles with fields like `title`, `category`, `image`, `link`, and `date`.
 4. **API Access**:
     - FastAPI routes provide structured access to the stored data.
 
@@ -125,6 +133,7 @@ curl -X GET "http://localhost:8000/articles" -H "accept: application/json"
 - **Kafka**: Replication and partitioning ensure data availability and scalability.
 - **PostgreSQL**: Supports horizontal scaling and transactional integrity.
 - **Modular API**: Easily extendable to include new news sources or features.
+- **Redis**: Added extra fault tolerance.
 
 ---
 
