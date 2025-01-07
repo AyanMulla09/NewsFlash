@@ -75,9 +75,8 @@ The system is divided into three primary layers:
         KAFKA_ZOOKEEPER_CONNECT="zookeeper:2181"
         KAFKA_CREATE_TOPICS="asianews:1:1,nyt_articles:1:1,guardian:1:1"
         KAFKA_URL_INSIDE="kafka:9093"
-        NYT_API_KEY="g0Wo0asWMGE0q1WK0jeU4eiZnnqmugeg"
-        GUARDIAN_API_KEY = "7c194277-c534-4402-9e3f-de51de1ad433"
-        "7c194277-c534-4402-9e3f-de51de1ad433"
+        NYT_API_KEY="API_KEY_OBTAINED_FROM_NYTIMES_DEVELOPER_ACCOUNT"
+        GUARDIAN_API_KEY = "API_KEY_OBTAINED_FROM_GUARDIAN_DEVELOPER_ACCOUNT"
         ```
 
 3. **Build and Run Services**:
