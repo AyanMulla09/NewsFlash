@@ -152,7 +152,7 @@ curl -X GET "http://localhost:8000/nytimes" -H "accept: application/json"
 
 ## Contributors
 
-- **Sujoy Dcunha**: Database setup, API design, Kafka broker scripting.
+- **Sujoy Dcunha**: Database setup, API design, Kafka broker scripting, Redis.
 - **Zhao Xuqing**: Frontend development, API design.
-- **Michael Glennon**: API design, data collection services.
-- **Ayan Mulla**: API integration, data collection services.
+- **Michael Glennon**: API design, data collection services, Documentation.
+- **Ayan Mulla**: API integration, data collection services, Redis, Documentation.
